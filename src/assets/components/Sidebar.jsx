@@ -126,10 +126,12 @@ const PromoBanner = () => (
 // Sign Out Button Component
 const SignOutButton = ({ onClick }) => (
   <button className="sidebar__signout-button" onClick={onClick}>
-    <span className="sidebar__signout-icon">
-      <FaSignOutAlt style={{ fontSize: "18px" }} />
-    </span>
-    <span className="sidebar__signout-text">Sign Out</span>
+    <div className="sidebar__signout-content">
+      <span className="sidebar__signout-text">Sign Out</span>
+      <span className="sidebar__signout-icon">
+        <FaSignOutAlt style={{ fontSize: "16px" }} />
+      </span>
+    </div>
   </button>
 );
 

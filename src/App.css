@@ -502,7 +502,8 @@ footer {
 
 .sidebar__footer {
   margin-top: auto;
-  padding: 1rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--cool-gray-30);
 }
 
 /* Promo banner section */
@@ -513,7 +514,7 @@ footer {
 }
 
 .sidebar__promo-card {
-  background-color: var(--primary-30);
+  background-color: var(--gray-10);
   border-radius: 1rem;
   padding: 1rem;
   text-align: center;
@@ -555,19 +556,26 @@ footer {
   all: unset;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  width: 100%;
+  justify-content: center;
+  width: calc(100% - 2rem);
   background-color: var(--cool-gray-20);
   border-radius: 0.5rem;
   color: var(--gray-80);
   height: 2.5rem;
   cursor: pointer;
-  padding: 0 1rem;
+  margin: 0 1rem;
   transition: background-color 0.2s;
 }
 
 .sidebar__signout-button:hover {
   background-color: var(--cool-gray-30);
+}
+
+.sidebar__signout-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
 }
 
 .sidebar__signout-icon {
@@ -579,6 +587,7 @@ footer {
 
 .sidebar__signout-text {
   font-size: 0.9rem;
+  font-weight: 500;
 }
 
 /* Auth Forms */
