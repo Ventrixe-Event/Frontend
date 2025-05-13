@@ -27,7 +27,6 @@ jobs:
           app_location: "/" # App source code path
           api_location: "" # Api source code path - set to empty if not used
           output_location: "dist" # Built app content directory - for Vite apps this is typically "dist"
-          deployment_action: "upload" # Required parameter - specify the action to perform (upload)
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
