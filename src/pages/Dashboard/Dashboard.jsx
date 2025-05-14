@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FaChartPie,
   FaCalendarAlt,
@@ -6,9 +6,65 @@ import {
   FaMusic,
   FaRunning,
   FaTshirt,
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Dashboard = () => {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [calendarDate, setCalendarDate] = useState(new Date());
+  
+  // Format date for display in the custom header
+  const formatMonth = (date) => {
+    return new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(date);
+  };
+  
+  // Custom header for the date picker to match the design in the image
+  const CustomHeader = ({
+    date,
+    decreaseMonth,
+    increaseMonth,
+    prevMonthButtonDisabled,
+    nextMonthButtonDisabled,
+  }) => (
+    <div className="datepicker-header">
+      <div className="datepicker-header-month">
+        <span>{formatMonth(date)}</span>
+        <button className="dropdown-arrow">▼</button>
+      </div>
+      <div className="datepicker-header-nav">
+        <button 
+          onClick={decreaseMonth} 
+          disabled={prevMonthButtonDisabled}
+          className="datepicker-nav-button"
+        >
+          <FaChevronLeft />
+        </button>
+        <button 
+          onClick={increaseMonth} 
+          disabled={nextMonthButtonDisabled}
+          className="datepicker-nav-button"
+        >
+          <FaChevronRight />
+        </button>
+      </div>
+    </div>
+  );
+  
+  // Custom day component to add highlights for events
+  const CustomDay = ({ date, dayOfMonth }) => {
+    // Example dates with events (would be dynamically populated in a real app)
+    const datesWithEvents = [3, 10, 12, 14, 23];
+    const hasEvent = datesWithEvents.includes(dayOfMonth);
+    
+    return (
+      <div className={`custom-day ${hasEvent ? 'has-event' : ''}`}>
+        {dayOfMonth}
+      </div>
+    );
+  };
   return (
     <div className="dashboard-page">
 
@@ -195,7 +251,49 @@ const Dashboard = () => {
       </div>
 
       {/* All Events Section */}
-      <div className="all-events-section">
+      <div className="dashboard-flex-container">
+        <div className="dashboard-calendar-section">
+          <div className="section-header">
+            <h3>Calendar</h3>
+            <div className="dropdown">
+              <span>Month View</span>
+              <span className="dropdown-arrow">▼</span>
+            </div>
+          </div>
+          <div className="calendar-container">
+            <DatePicker
+              selected={selectedDate}
+              onChange={(date) => setSelectedDate(date)}
+              inline
+              renderCustomHeader={CustomHeader}
+              dayClassName={date => {
+                const day = date.getDate();
+                // Example dates with events
+                const datesWithEvents = [3, 10, 12, 14, 23];
+                return datesWithEvents.includes(day) ? 'highlighted-day' : undefined;
+              }}
+            />
+          </div>
+          <div className="upcoming-events">
+            <h4>Upcoming Events</h4>
+            <div className="upcoming-event-item">
+              <div className="event-dot"></div>
+              <div className="event-info">
+                <p className="event-name">Music Festival</p>
+                <p className="event-time">10:00 AM - 6:00 PM</p>
+              </div>
+            </div>
+            <div className="upcoming-event-item">
+              <div className="event-dot"></div>
+              <div className="event-info">
+                <p className="event-name">Tech Conference</p>
+                <p className="event-time">09:30 AM - 4:00 PM</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="all-events-section">
         <div className="section-header">
           <h3>All Events</h3>
           <button className="view-all-btn">View All Event</button>
@@ -244,6 +342,7 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
+      </div>
       </div>
 
       {/* Recent Bookings Section */}
