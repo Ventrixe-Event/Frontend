@@ -11,6 +11,7 @@ import {
   FaFileInvoiceDollar,
   FaBook,
   FaSignOutAlt,
+  FaCalendar,
 } from "react-icons/fa";
 
 // Navigation items configuration
@@ -20,6 +21,12 @@ const NAVIGATION_ITEMS = [
     label: "Dashboard",
     icon: FaThLarge,
     color: "#f26cf9",
+  },
+  {
+    to: "/portal/events",
+    label: "Events",
+    icon: FaCalendar,
+    color: "#37437d",
   },
   {
     to: "/portal/invoices",

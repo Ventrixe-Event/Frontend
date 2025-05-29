@@ -2,7 +2,7 @@
 const API_URLS = {
   AUTH: "http://localhost:5001/api",
   EVENTS:
-    "https://eventservice-hghxg5bed8gdfebg.centralus-01.azurewebsites.net/api",
+    "https://eventservices-cmbydhd0htc4gtak.centralus-01.azurewebsites.net/api",
   BOOKINGS: "http://localhost:5003/api",
   PAYMENTS: "http://localhost:5004/api",
   NOTIFICATIONS: "http://localhost:5005/api",
@@ -25,6 +25,9 @@ const ENDPOINTS = {
   EVENTS: {
     ALL: "/events",
     BY_ID: (id) => `/events/${id}`,
+    BY_CATEGORY: (category) => `/events/category/${category}`,
+    BY_STATUS: (status) => `/events/status/${status}`,
+    SEARCH: (searchTerm) => `/events/search?searchTerm=${searchTerm}`,
     CREATE: "/events",
     UPDATE: (id) => `/events/${id}`,
     DELETE: (id) => `/events/${id}`,

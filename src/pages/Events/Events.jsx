@@ -5,6 +5,10 @@ import {
   FaChevronDown,
   FaTh,
   FaList,
+  FaCalendarAlt,
+  FaMapMarkerAlt,
+  FaDollarSign,
+  FaUsers,
 } from "react-icons/fa";
 import { eventService } from "../../services/eventService";
 
@@ -17,25 +21,46 @@ const Events = () => {
 
   // API related state
   const [events, setEvents] = useState([]);
+  const [filteredEvents, setFilteredEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Categories for the dropdown
+  const categories = [
+    "All Category",
+    "Music",
+    "Technology",
+    "Fashion",
+    "Food & Culinary",
+    "Health & Wellness",
+    "Art & Design",
+    "Outdoor & Adventure",
+  ];
+
+  // Status counts for tabs
+  const [statusCounts, setStatusCounts] = useState({
+    Active: 0,
+    Draft: 0,
+    Past: 0,
+  });
 
   // Fetch events from API
   useEffect(() => {
     const fetchEvents = async () => {
-      setLoading(true);
-      setError(null);
-
       try {
+        setLoading(true);
+        setError(null);
+
         const result = await eventService.getAllEvents();
 
         if (result.success) {
-          setEvents(result.data || []);
+          setEvents(result.data);
+          updateStatusCounts(result.data);
         } else {
           setError(result.error || "Failed to fetch events");
         }
       } catch (err) {
-        setError("Network error: Unable to connect to the event service");
+        setError("An unexpected error occurred");
         console.error("Error fetching events:", err);
       } finally {
         setLoading(false);
@@ -45,240 +70,351 @@ const Events = () => {
     fetchEvents();
   }, []);
 
-  const tabs = ["Active", "Draft", "Past"];
-  const categories = [
-    "All Category",
-    "Outdoor & Adventure",
-    "Music",
-    "Fashion",
-    "Health & Wellness",
-    "Art & Design",
-    "Food & Culinary",
-    "Technology",
-  ];
-  const months = ["This Month", "Next Month", "This Year"];
-
-  const filteredEvents = events.filter((event) => {
-    const matchesTab =
-      activeTab === "Active"
-        ? event.status === "Active" || event.isActive !== false
-        : true;
-    const matchesSearch =
-      (event.title || event.name || "")
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase()) ||
-      (event.location || "").toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "All Category" ||
-      event.category === selectedCategory;
-    return matchesTab && matchesSearch && matchesCategory;
-  });
-
-  const getProgressColor = (progress) => {
-    if (progress >= 70) return "var(--primary-100)";
-    if (progress >= 50) return "var(--yellow-100)";
-    return "var(--secondary-100)";
+  // Update status counts for tabs
+  const updateStatusCounts = (eventsData) => {
+    const counts = eventsData.reduce(
+      (acc, event) => {
+        if (event.status === "Active") acc.Active++;
+        else if (event.status === "Draft") acc.Draft++;
+        else acc.Past++;
+        return acc;
+      },
+      { Active: 0, Draft: 0, Past: 0 }
+    );
+    setStatusCounts(counts);
   };
 
-  // Loading state
+  // Filter events based on current filters
+  useEffect(() => {
+    let filtered = [...events];
+
+    // Filter by status (tab)
+    if (activeTab === "Active") {
+      filtered = filtered.filter((event) => event.status === "Active");
+    } else if (activeTab === "Draft") {
+      filtered = filtered.filter((event) => event.status === "Draft");
+    } else if (activeTab === "Past") {
+      filtered = filtered.filter((event) => event.status === "Past");
+    }
+
+    // Filter by category
+    if (selectedCategory !== "All Category") {
+      filtered = filtered.filter(
+        (event) => event.category === selectedCategory
+      );
+    }
+
+    // Filter by search term
+    if (searchTerm.trim()) {
+      filtered = filtered.filter(
+        (event) =>
+          event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          event.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          event.location.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    setFilteredEvents(filtered);
+  }, [events, activeTab, selectedCategory, searchTerm]);
+
+  // Handle search
+  const handleSearch = async () => {
+    if (searchTerm.trim()) {
+      try {
+        setLoading(true);
+        const result = await eventService.searchEvents(searchTerm);
+        if (result.success) {
+          setFilteredEvents(result.data);
+        }
+      } catch (err) {
+        console.error("Search error:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  // Handle category filter
+  const handleCategoryFilter = async (category) => {
+    setSelectedCategory(category);
+
+    if (category !== "All Category") {
+      try {
+        setLoading(true);
+        const result = await eventService.getEventsByCategory(category);
+        if (result.success) {
+          // Still need to apply other filters
+          let filtered = result.data;
+          if (activeTab !== "Active") {
+            filtered = filtered.filter((event) => event.status === activeTab);
+          }
+          setFilteredEvents(filtered);
+        }
+      } catch (err) {
+        console.error("Category filter error:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  // Get status color for event cards
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "Active":
+        return "#10B981"; // green
+      case "Draft":
+        return "#F59E0B"; // yellow
+      case "Past":
+        return "#6B7280"; // gray
+      default:
+        return "#6B7280";
+    }
+  };
+
+  // Format progress bar color based on percentage
+  const getProgressColor = (progress) => {
+    if (progress >= 80) return "#10B981"; // green
+    if (progress >= 60) return "#3B82F6"; // blue
+    if (progress >= 40) return "#F59E0B"; // yellow
+    return "#EF4444"; // red
+  };
+
   if (loading) {
     return (
-      <div className="events-page">
-        <div className="loading-container">
-          <div className="loading-spinner"></div>
-          <p>Loading events...</p>
-        </div>
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Loading events...</p>
       </div>
     );
   }
 
-  // Error state
   if (error) {
     return (
-      <div className="events-page">
-        <div className="error-container">
-          <h3>Error Loading Events</h3>
-          <p>{error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="retry-button"
-          >
-            Retry
-          </button>
-        </div>
+      <div className="error-container">
+        <h3>Error Loading Events</h3>
+        <p>{error}</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="retry-button"
+        >
+          Try Again
+        </button>
       </div>
     );
   }
 
   return (
     <div className="events-page">
-      {/* Header Controls */}
       <div className="events-header">
-        <div className="events-tabs">
-          {tabs.map((tab) => (
+        <h1>Events</h1>
+        <div className="header-controls">
+          <div className="user-profile">
+            <div className="notification-icon">
+              <i className="fas fa-bell"></i>
+            </div>
+            <div className="settings-icon">
+              <i className="fas fa-cog"></i>
+            </div>
+            <div className="user-info">
+              <span className="user-name">Orlando Laurentius</span>
+              <span className="user-role">Admin</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="events-content">
+        {/* Status Tabs */}
+        <div className="status-tabs">
+          {["Active", "Draft", "Past"].map((status) => (
             <button
-              key={tab}
-              className={`events-tab ${
-                activeTab === tab ? "events-tab--active" : ""
-              }`}
-              onClick={() => setActiveTab(tab)}
+              key={status}
+              className={`status-tab ${activeTab === status ? "active" : ""}`}
+              onClick={() => setActiveTab(status)}
             >
-              {tab}
-              {tab === "Active" && <span className="tab-count">(8)</span>}
-              {tab === "Draft" && <span className="tab-count">(2)</span>}
-              {tab === "Past" && <span className="tab-count">(12)</span>}
+              {status} ({statusCounts[status]})
             </button>
           ))}
         </div>
 
-        <div className="events-controls">
-          <div className="events-search">
+        {/* Search and Filters */}
+        <div className="search-filters">
+          <div className="search-box">
             <FaSearch className="search-icon" />
             <input
               type="text"
-              placeholder="Search event, location, etc..."
+              placeholder="Search event, location, etc"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && handleSearch()}
             />
           </div>
 
-          <button className="filter-btn">
-            <FaFilter />
-          </button>
+          <div className="filters">
+            <div className="filter-dropdown">
+              <select
+                value={selectedCategory}
+                onChange={(e) => handleCategoryFilter(e.target.value)}
+                className="category-filter"
+              >
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+              <FaChevronDown className="dropdown-icon" />
+            </div>
 
-          <div className="dropdown">
-            <span>{selectedCategory}</span>
-            <FaChevronDown />
-          </div>
+            <div className="filter-dropdown">
+              <select
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(e.target.value)}
+                className="month-filter"
+              >
+                <option value="This Month">This Month</option>
+                <option value="Next Month">Next Month</option>
+                <option value="This Year">This Year</option>
+              </select>
+              <FaChevronDown className="dropdown-icon" />
+            </div>
 
-          <div className="dropdown">
-            <span>{selectedMonth}</span>
-            <FaChevronDown />
-          </div>
-
-          <div className="view-toggle">
-            <button
-              className={`view-btn ${
-                viewMode === "grid" ? "view-btn--active" : ""
-              }`}
-              onClick={() => setViewMode("grid")}
-            >
-              <FaTh />
-            </button>
-            <button
-              className={`view-btn ${
-                viewMode === "list" ? "view-btn--active" : ""
-              }`}
-              onClick={() => setViewMode("list")}
-            >
-              <FaList />
-            </button>
+            <div className="view-controls">
+              <button
+                className={`view-btn ${viewMode === "grid" ? "active" : ""}`}
+                onClick={() => setViewMode("grid")}
+              >
+                <FaTh />
+              </button>
+              <button
+                className={`view-btn ${viewMode === "list" ? "active" : ""}`}
+                onClick={() => setViewMode("list")}
+              >
+                <FaList />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Events Grid */}
-      <div
-        className={`events-grid ${
-          viewMode === "list" ? "events-grid--list" : ""
-        }`}
-      >
-        {filteredEvents.map((event) => (
-          <div key={event.id} className="event-card-new">
-            <div className="event-card-header">
-              <span className="event-category">
-                {event.category || "General"}
-              </span>
-              <span className="event-status-badge">
-                <span className="status-dot-active"></span>
-                {event.status || "Active"}
-              </span>
+        {/* Events Grid */}
+        <div className={`events-grid ${viewMode}`}>
+          {filteredEvents.map((event) => (
+            <div key={event.id} className="event-card">
+              <div className="event-card-header">
+                <span className="event-category">{event.category}</span>
+                <span
+                  className="event-status-badge"
+                  style={{ backgroundColor: getStatusColor(event.status) }}
+                >
+                  <span className="status-dot"></span>
+                  {event.status}
+                </span>
+              </div>
+
+              <div className="event-card-image">
+                {/* Placeholder for event image */}
+                <div className="image-placeholder">
+                  <FaCalendarAlt className="placeholder-icon" />
+                </div>
+              </div>
+
+              <div className="event-card-content">
+                <div className="event-meta">
+                  <span className="event-date-time">
+                    <FaCalendarAlt className="meta-icon" />
+                    {event.formattedDateAndTime ||
+                      `${event.formattedDate} - ${event.formattedTime}`}
+                  </span>
+                </div>
+
+                <h3 className="event-title">{event.title}</h3>
+
+                <div className="event-location">
+                  <FaMapMarkerAlt className="meta-icon" />
+                  <span>{event.location}</span>
+                </div>
+
+                {event.description && (
+                  <p className="event-description">
+                    {event.description.length > 100
+                      ? `${event.description.substring(0, 100)}...`
+                      : event.description}
+                  </p>
+                )}
+
+                <div className="event-stats">
+                  <div className="attendance">
+                    <FaUsers className="meta-icon" />
+                    <span>
+                      {event.currentAttendees}/{event.maxAttendees}
+                    </span>
+                  </div>
+                  {event.organizerName && (
+                    <div className="organizer">
+                      <span>by {event.organizerName}</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="progress-section">
+                  <div className="progress-bar">
+                    <div
+                      className="progress-fill"
+                      style={{
+                        width: `${event.progress}%`,
+                        backgroundColor: getProgressColor(event.progress),
+                      }}
+                    ></div>
+                  </div>
+                  <span className="progress-text">{event.progress}%</span>
+                </div>
+
+                <div className="event-footer">
+                  <div className="event-price">
+                    <FaDollarSign className="price-icon" />
+                    <span className="price">${event.price}</span>
+                  </div>
+                  <div className="event-actions">
+                    <button className="action-btn view-btn">View</button>
+                    <button className="action-btn edit-btn">Edit</button>
+                  </div>
+                </div>
+              </div>
             </div>
+          ))}
+        </div>
 
-            <div className="event-card-image">
-              {/* Placeholder for event image */}
-            </div>
-
-            <div className="event-card-content">
-              <div className="event-meta">
-                <span className="event-date-time">
-                  {event.date || event.startDate || "TBD"} -{" "}
-                  {event.time || event.startTime || "TBD"}
-                </span>
-              </div>
-
-              <h3 className="event-title">
-                {event.title || event.name || "Untitled Event"}
-              </h3>
-
-              <p className="event-location">
-                {event.location || event.venue || "Location TBD"}
-              </p>
-
-              <div className="event-details-visible">
-                <div className="event-detail-row">
-                  <span className="detail-label">Event ID:</span>
-                  <span className="detail-value">
-                    {event.id || event.eventId || "N/A"}
-                  </span>
-                </div>
-                <div className="event-detail-row">
-                  <span className="detail-label">Status:</span>
-                  <span className="detail-value">
-                    {event.status || "Active"}
-                  </span>
-                </div>
-                <div className="event-detail-row">
-                  <span className="detail-label">Category:</span>
-                  <span className="detail-value">
-                    {event.category || "General"}
-                  </span>
-                </div>
-              </div>
-
-              <div className="event-progress">
-                <div className="progress-bar">
-                  <div
-                    className="progress-fill"
-                    style={{
-                      width: `${event.progress || 0}%`,
-                      backgroundColor: getProgressColor(event.progress || 0),
-                    }}
-                  ></div>
-                </div>
-                <span className="progress-percentage">
-                  {event.progress || 0}%
-                </span>
-              </div>
-
-              <div className="event-footer">
-                <span className="event-price">
-                  ${event.price || event.ticketPrice || 0}
-                </span>
-                <div className="event-actions">
-                  <button className="event-action-btn">Edit</button>
-                  <button className="event-action-btn">View</button>
-                </div>
-              </div>
+        {/* Pagination */}
+        {filteredEvents.length > 0 && (
+          <div className="pagination">
+            <span className="pagination-info">
+              Showing {filteredEvents.length} out of {events.length}
+            </span>
+            <div className="pagination-controls">
+              <button className="pagination-btn">
+                <i className="fas fa-chevron-left"></i>
+              </button>
+              <button className="pagination-btn active">1</button>
+              <button className="pagination-btn">2</button>
+              <button className="pagination-btn">3</button>
+              <span className="pagination-dots">...</span>
+              <button className="pagination-btn">8</button>
+              <button className="pagination-btn">
+                <i className="fas fa-chevron-right"></i>
+              </button>
             </div>
           </div>
-        ))}
-      </div>
+        )}
 
-      {/* Pagination */}
-      <div className="events-pagination">
-        <span className="pagination-info">
-          Showing {filteredEvents.length} out of {events.length}
-        </span>
-        <div className="pagination-controls">
-          <button className="pagination-btn pagination-btn--prev">‹</button>
-          <button className="pagination-btn pagination-btn--active">1</button>
-          <button className="pagination-btn">2</button>
-          <button className="pagination-btn">3</button>
-          <span className="pagination-ellipsis">...</span>
-          <button className="pagination-btn">8</button>
-          <button className="pagination-btn pagination-btn--next">›</button>
-        </div>
+        {/* No Events Message */}
+        {filteredEvents.length === 0 && !loading && (
+          <div className="no-events">
+            <FaCalendarAlt className="no-events-icon" />
+            <h3>No events found</h3>
+            <p>Try adjusting your filters or search terms</p>
+          </div>
+        )}
       </div>
     </div>
   );
