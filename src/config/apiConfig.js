@@ -9,7 +9,8 @@ const API_URLS = {
   CATEGORIES: "http://localhost:5006/api",
   INVOICES: "http://localhost:5010/api",
   USER_PROFILES: "http://localhost:5008/api",
-  FEEDBACK: "http://localhost:5110/api",
+  FEEDBACK:
+    "https://feedbackservice-a7cpfabadjd8c2dm.centralus-01.azurewebsites.net/api",
 };
 
 // Common API endpoints for each service
