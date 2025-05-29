@@ -24,6 +24,7 @@ const Events = () => {
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [dataSource, setDataSource] = useState(""); // Track data source
 
   // Categories for the dropdown
   const categories = [
@@ -51,16 +52,27 @@ const Events = () => {
         setLoading(true);
         setError(null);
 
+        console.log("🔄 Attempting to fetch data from EventService API...");
         const result = await eventService.getAllEvents();
 
-        if (result.success) {
+        if (result.success && result.data) {
+          console.log(
+            "✅ API data received:",
+            result.data.length,
+            "event entries"
+          );
           setEvents(result.data);
           updateStatusCounts(result.data);
+          setDataSource("API");
         } else {
+          console.log("⚠️ API call succeeded but no valid data");
           setError(result.error || "Failed to fetch events");
+          setDataSource("Error");
         }
       } catch (err) {
+        console.log("❌ API not available:", err.message);
         setError("An unexpected error occurred");
+        setDataSource("Error");
         console.error("Error fetching events:", err);
       } finally {
         setLoading(false);
@@ -208,21 +220,28 @@ const Events = () => {
     <div className="events-page">
       <div className="events-header">
         <h1>Events</h1>
-        <div className="header-controls">
-          <div className="user-profile">
-            <div className="notification-icon">
-              <i className="fas fa-bell"></i>
-            </div>
-            <div className="settings-icon">
-              <i className="fas fa-cog"></i>
-            </div>
-            <div className="user-info">
-              <span className="user-name">Orlando Laurentius</span>
-              <span className="user-role">Admin</span>
-            </div>
-          </div>
-        </div>
       </div>
+
+      {/* Data Source Indicator */}
+      {dataSource && (
+        <div
+          style={{
+            padding: "10px 20px",
+            marginBottom: "20px",
+            borderRadius: "8px",
+            backgroundColor: dataSource === "API" ? "#e8f5e8" : "#fff3cd",
+            border:
+              dataSource === "API" ? "1px solid #4caf50" : "1px solid #ffc107",
+            color: dataSource === "API" ? "#2e7d32" : "#856404",
+            fontWeight: "bold",
+            textAlign: "center",
+          }}
+        >
+          {dataSource === "API"
+            ? "🟢 Data Source: EventService API (Live Data)"
+            : "🟡 Data Source: API Error - Please check EventService connection"}
+        </div>
+      )}
 
       <div className="events-content">
         {/* Status Tabs */}
