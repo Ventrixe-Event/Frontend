@@ -7,6 +7,7 @@ import {
   FaChevronRight,
 } from "react-icons/fa";
 import { feedbackService } from "../../services/feedbackService";
+import "./Feedback.css";
 
 const Feedback = () => {
   const [feedbackData, setFeedbackData] = useState([]);
