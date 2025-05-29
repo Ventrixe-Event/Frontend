@@ -22,15 +22,15 @@ const NAVIGATION_ITEMS = [
     color: "#f26cf9",
   },
   {
-    to: "/portal/bookings",
-    label: "Bookings",
-    icon: FaBook,
-    color: "#37437d",
-  },
-  {
     to: "/portal/invoices",
     label: "Invoices",
     icon: FaFileInvoiceDollar,
+    color: "#37437d",
+  },
+  {
+    to: "/portal/feedback",
+    label: "Feedback",
+    icon: FaStar,
     color: "#37437d",
   },
   {
@@ -46,12 +46,6 @@ const NAVIGATION_ITEMS = [
     color: "#37437d",
   },
   {
-    to: "/portal/events",
-    label: "Events",
-    icon: FaUsers,
-    color: "#37437d",
-  },
-  {
     to: "/portal/financial",
     label: "Financial",
     icon: FaDollarSign,
@@ -61,12 +55,6 @@ const NAVIGATION_ITEMS = [
     to: "/portal/gallery",
     label: "Gallery",
     icon: FaImage,
-    color: "#37437d",
-  },
-  {
-    to: "/portal/feedback",
-    label: "Feedback",
-    icon: FaStar,
     color: "#37437d",
   },
 ];
