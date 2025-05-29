@@ -6,7 +6,7 @@ const API_URLS = {
   PAYMENTS: "http://localhost:5004/api",
   NOTIFICATIONS: "http://localhost:5005/api",
   CATEGORIES: "http://localhost:5006/api",
-  INVOICES: "http://localhost:5007/api",
+  INVOICES: "http://localhost:5010/api",
   USER_PROFILES: "http://localhost:5008/api",
   FEEDBACK: "http://localhost:5110/api",
 };
@@ -32,6 +32,18 @@ const ENDPOINTS = {
     CREATE: "/bookings",
     UPDATE: (id) => `/bookings/${id}`,
     DELETE: (id) => `/bookings/${id}`,
+  },
+  INVOICES: {
+    ALL: "/invoices",
+    BY_ID: (id) => `/invoices/${id}`,
+    BY_NUMBER: (number) => `/invoices/number/${number}`,
+    BY_STATUS: (status) => `/invoices/status/${status}`,
+    BY_EVENT: (eventId) => `/invoices/event/${eventId}`,
+    BY_USER: (userId) => `/invoices/user/${userId}`,
+    OVERDUE: "/invoices/overdue",
+    CREATE: "/invoices",
+    UPDATE: (id) => `/invoices/${id}`,
+    DELETE: (id) => `/invoices/${id}`,
   },
   FEEDBACK: {
     ALL: "/feedbacks",
