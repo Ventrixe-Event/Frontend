@@ -2,7 +2,7 @@
 const API_URLS = {
   AUTH: "http://localhost:5001/api",
   EVENTS:
-    "https://eventserv-h7gwcxeahge8dye0.centralus-01.azurewebsites.net/api",
+    "https://eventservices-cmbydhd0htc4gtak.centralus-01.azurewebsites.net/api",
   BOOKINGS: "http://localhost:5003/api",
   PAYMENTS: "http://localhost:5004/api",
   NOTIFICATIONS: "http://localhost:5005/api",
