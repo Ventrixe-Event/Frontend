@@ -7,7 +7,8 @@ const API_URLS = {
   PAYMENTS: "http://localhost:5004/api",
   NOTIFICATIONS: "http://localhost:5005/api",
   CATEGORIES: "http://localhost:5006/api",
-  INVOICES: "http://localhost:5010/api",
+  INVOICES:
+    "https://invoiceservice-gmafbqd0gjg8abdf.centralus-01.azurewebsites.net/api",
   USER_PROFILES: "http://localhost:5008/api",
   FEEDBACK:
     "https://feedbackservice-a7cpfabadjd8c2dm.centralus-01.azurewebsites.net/api",
