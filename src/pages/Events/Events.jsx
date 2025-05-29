@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FaSearch,
   FaFilter,
@@ -6,6 +6,7 @@ import {
   FaTh,
   FaList,
 } from "react-icons/fa";
+import { eventService } from "../../services/eventService";
 
 const Events = () => {
   const [activeTab, setActiveTab] = useState("Active");
@@ -14,105 +15,35 @@ const Events = () => {
   const [selectedCategory, setSelectedCategory] = useState("All Category");
   const [selectedMonth, setSelectedMonth] = useState("This Month");
 
-  // Sample events data
-  const [events] = useState([
-    {
-      id: 1,
-      category: "Outdoor & Adventure",
-      title: "Adventure Gear Show",
-      date: "June 5, 2026",
-      time: "5:00 PM",
-      location: "Rocky Mountain Exhibition Hall, Denver, CO",
-      status: "Active",
-      progress: 65,
-      price: 40,
-      image: "/placeholder-outdoor.jpg",
-    },
-    {
-      id: 2,
-      category: "Music",
-      title: "Symphony Under the Stars",
-      date: "Apr 29, 2026",
-      time: "7:00 PM",
-      location: "Sunset Park, Los Angeles, CA",
-      status: "Active",
-      progress: 75,
-      price: 50,
-      image: "/placeholder-music.jpg",
-    },
-    {
-      id: 3,
-      category: "Fashion",
-      title: "Runway Revolution 2029",
-      date: "May 1, 2026",
-      time: "6:00 PM",
-      location: "Vogue Hall, New York, NY",
-      status: "Active",
-      progress: 50,
-      price: 100,
-      image: "/placeholder-fashion.jpg",
-    },
-    {
-      id: 4,
-      category: "Health & Wellness",
-      title: "Global Wellness Summit",
-      date: "May 5, 2026",
-      time: "9:00 AM",
-      location: "Wellness Arena, Miami, FL",
-      status: "Active",
-      progress: 40,
-      price: 75,
-      image: "/placeholder-health.jpg",
-    },
-    {
-      id: 5,
-      category: "Art & Design",
-      title: "Artistry Unveiled Expo",
-      date: "May 15, 2026",
-      time: "10:00 AM",
-      location: "Modern Art Gallery, Chicago, IL",
-      status: "Active",
-      progress: 85,
-      price: 20,
-      image: "/placeholder-art.jpg",
-    },
-    {
-      id: 6,
-      category: "Food & Culinary",
-      title: "Culinary Delights Festival",
-      date: "May 25, 2026",
-      time: "11:00 AM",
-      location: "Gourmet Plaza, San Francisco, CA",
-      status: "Active",
-      progress: 60,
-      price: 45,
-      image: "/placeholder-food.jpg",
-    },
-    {
-      id: 7,
-      category: "Music",
-      title: "Echo Beats Festival",
-      date: "May 29, 2026",
-      time: "6:00 PM",
-      location: "Sunset Park, Los Angeles, CA",
-      status: "Active",
-      progress: 70,
-      price: 60,
-      image: "/placeholder-music2.jpg",
-    },
-    {
-      id: 8,
-      category: "Technology",
-      title: "Tech Future Expo",
-      date: "June 1, 2026",
-      time: "10:00 AM",
-      location: "Silicon Valley, San Jose, CA",
-      status: "Active",
-      progress: 55,
-      price: 80,
-      image: "/placeholder-tech.jpg",
-    },
-  ]);
+  // API related state
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch events from API
+  useEffect(() => {
+    const fetchEvents = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const result = await eventService.getAllEvents();
+
+        if (result.success) {
+          setEvents(result.data || []);
+        } else {
+          setError(result.error || "Failed to fetch events");
+        }
+      } catch (err) {
+        setError("Network error: Unable to connect to the event service");
+        console.error("Error fetching events:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   const tabs = ["Active", "Draft", "Past"];
   const categories = [
@@ -129,10 +60,14 @@ const Events = () => {
 
   const filteredEvents = events.filter((event) => {
     const matchesTab =
-      activeTab === "Active" ? event.status === "Active" : true;
+      activeTab === "Active"
+        ? event.status === "Active" || event.isActive !== false
+        : true;
     const matchesSearch =
-      event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      event.location.toLowerCase().includes(searchTerm.toLowerCase());
+      (event.title || event.name || "")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      (event.location || "").toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory =
       selectedCategory === "All Category" ||
       event.category === selectedCategory;
@@ -144,6 +79,36 @@ const Events = () => {
     if (progress >= 50) return "var(--yellow-100)";
     return "var(--secondary-100)";
   };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="events-page">
+        <div className="loading-container">
+          <div className="loading-spinner"></div>
+          <p>Loading events...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="events-page">
+        <div className="error-container">
+          <h3>Error Loading Events</h3>
+          <p>{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="retry-button"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="events-page">
@@ -221,10 +186,12 @@ const Events = () => {
         {filteredEvents.map((event) => (
           <div key={event.id} className="event-card-new">
             <div className="event-card-header">
-              <span className="event-category">{event.category}</span>
+              <span className="event-category">
+                {event.category || "General"}
+              </span>
               <span className="event-status-badge">
                 <span className="status-dot-active"></span>
-                {event.status}
+                {event.status || "Active"}
               </span>
             </div>
 
@@ -235,28 +202,37 @@ const Events = () => {
             <div className="event-card-content">
               <div className="event-meta">
                 <span className="event-date-time">
-                  {event.date} - {event.time}
+                  {event.date || event.startDate || "TBD"} -{" "}
+                  {event.time || event.startTime || "TBD"}
                 </span>
               </div>
 
-              <h3 className="event-title">{event.title}</h3>
+              <h3 className="event-title">
+                {event.title || event.name || "Untitled Event"}
+              </h3>
 
-              <p className="event-location">{event.location}</p>
+              <p className="event-location">
+                {event.location || event.venue || "Location TBD"}
+              </p>
 
               <div className="event-details-visible">
                 <div className="event-detail-row">
                   <span className="detail-label">Event ID:</span>
                   <span className="detail-value">
-                    EVT{event.id.toString().padStart(4, "0")}
+                    {event.id || event.eventId || "N/A"}
                   </span>
                 </div>
                 <div className="event-detail-row">
                   <span className="detail-label">Status:</span>
-                  <span className="detail-value">{event.status}</span>
+                  <span className="detail-value">
+                    {event.status || "Active"}
+                  </span>
                 </div>
                 <div className="event-detail-row">
                   <span className="detail-label">Category:</span>
-                  <span className="detail-value">{event.category}</span>
+                  <span className="detail-value">
+                    {event.category || "General"}
+                  </span>
                 </div>
               </div>
 
@@ -265,16 +241,20 @@ const Events = () => {
                   <div
                     className="progress-fill"
                     style={{
-                      width: `${event.progress}%`,
-                      backgroundColor: getProgressColor(event.progress),
+                      width: `${event.progress || 0}%`,
+                      backgroundColor: getProgressColor(event.progress || 0),
                     }}
                   ></div>
                 </div>
-                <span className="progress-percentage">{event.progress}%</span>
+                <span className="progress-percentage">
+                  {event.progress || 0}%
+                </span>
               </div>
 
               <div className="event-footer">
-                <span className="event-price">${event.price}</span>
+                <span className="event-price">
+                  ${event.price || event.ticketPrice || 0}
+                </span>
                 <div className="event-actions">
                   <button className="event-action-btn">Edit</button>
                   <button className="event-action-btn">View</button>
