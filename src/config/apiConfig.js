@@ -1,21 +1,14 @@
 // API base URLs for different microservices
 const API_URLS = {
-  AUTH: process.env.REACT_APP_AUTH_API_URL || "http://localhost:5001/api",
-  EVENTS: process.env.REACT_APP_EVENTS_API_URL || "http://localhost:5002/api",
-  BOOKINGS:
-    process.env.REACT_APP_BOOKINGS_API_URL || "http://localhost:5003/api",
-  PAYMENTS:
-    process.env.REACT_APP_PAYMENTS_API_URL || "http://localhost:5004/api",
-  NOTIFICATIONS:
-    process.env.REACT_APP_NOTIFICATIONS_API_URL || "http://localhost:5005/api",
-  CATEGORIES:
-    process.env.REACT_APP_CATEGORIES_API_URL || "http://localhost:5006/api",
-  INVOICES:
-    process.env.REACT_APP_INVOICES_API_URL || "http://localhost:5007/api",
-  USER_PROFILES:
-    process.env.REACT_APP_USER_PROFILES_API_URL || "http://localhost:5008/api",
-  FEEDBACK:
-    process.env.REACT_APP_FEEDBACK_API_URL || "http://localhost:5009/api",
+  AUTH: "http://localhost:5001/api",
+  EVENTS: "http://localhost:5002/api",
+  BOOKINGS: "http://localhost:5003/api",
+  PAYMENTS: "http://localhost:5004/api",
+  NOTIFICATIONS: "http://localhost:5005/api",
+  CATEGORIES: "http://localhost:5006/api",
+  INVOICES: "http://localhost:5007/api",
+  USER_PROFILES: "http://localhost:5008/api",
+  FEEDBACK: "http://localhost:5110/api",
 };
 
 // Common API endpoints for each service
@@ -41,11 +34,11 @@ const ENDPOINTS = {
     DELETE: (id) => `/bookings/${id}`,
   },
   FEEDBACK: {
-    ALL: "/feedback",
-    BY_ID: (id) => `/feedback/${id}`,
-    BY_EVENT: (eventId) => `/feedback/event/${eventId}`,
-    CREATE: "/feedback",
-    STATS: "/feedback/stats",
+    ALL: "/feedbacks",
+    BY_ID: (id) => `/feedbacks/${id}`,
+    BY_EVENT: (eventId) => `/feedbacks/event/${eventId}`,
+    CREATE: "/feedbacks",
+    STATS: "/feedbacks/statistics",
     CATEGORIES: "/categories",
   },
   // Add more endpoints as needed

@@ -6,6 +6,7 @@ import {
   FaChevronLeft,
   FaChevronRight,
 } from "react-icons/fa";
+import { feedbackService } from "../../services/feedbackService";
 
 const Feedback = () => {
   const [feedbackData, setFeedbackData] = useState([]);
@@ -18,8 +19,9 @@ const Feedback = () => {
     useState("All Rating");
   const [selectedCategoryFilter, setSelectedCategoryFilter] =
     useState("All Category");
+  const [dataSource, setDataSource] = useState(""); // Track data source
 
-  // Mock data for demonstration
+  // Mock data for fallback when API is not available
   const mockStats = {
     overallRating: 4.8,
     totalReviews: 15545,
@@ -120,12 +122,73 @@ const Feedback = () => {
   const loadFeedbackData = async () => {
     try {
       setLoading(true);
-      // Using mock data for demo
+
+      // Try to fetch data from API
+      try {
+        console.log("🔄 Attempting to fetch data from FeedbackService API...");
+        const [feedbackResponse, statsResponse] = await Promise.all([
+          feedbackService.getAllFeedback(),
+          feedbackService.getFeedbackStats(),
+        ]);
+
+        if (feedbackResponse.success && feedbackResponse.result) {
+          console.log(
+            "✅ API data received:",
+            feedbackResponse.result.length,
+            "feedback entries"
+          );
+          setFeedbackData(feedbackResponse.result);
+          setTotalPages(Math.ceil(feedbackResponse.result.length / 6));
+          setDataSource("API");
+        } else {
+          console.log(
+            "⚠️ API call succeeded but no valid data, using frontend mock data"
+          );
+          // Fallback to mock data
+          setFeedbackData(mockFeedback);
+          setTotalPages(Math.ceil(568 / 6));
+          setDataSource("Mock");
+        }
+
+        if (statsResponse.success && statsResponse.result) {
+          console.log("✅ API stats received");
+          // Transform API response to match frontend expectations
+          const transformedStats = {
+            overallRating: statsResponse.result.overallRating,
+            totalReviews: statsResponse.result.totalReviews,
+            monthlyData: statsResponse.result.monthlyData.map((item) => ({
+              month: item.month,
+              rating1to3: item.rating1To3,
+              rating4to5: item.rating4To5,
+            })),
+          };
+          setStats(transformedStats);
+        } else {
+          console.log(
+            "⚠️ API stats call succeeded but no valid data, using mock stats"
+          );
+          // Fallback to mock stats
+          setStats(mockStats);
+          setDataSource("Mock");
+        }
+      } catch (apiError) {
+        console.log(
+          "❌ API not available, using frontend mock data:",
+          apiError.message
+        );
+        // Use mock data when API is not available
+        setFeedbackData(mockFeedback);
+        setStats(mockStats);
+        setTotalPages(Math.ceil(568 / 6));
+        setDataSource("Mock");
+      }
+    } catch (error) {
+      console.error("❌ Error loading feedback data:", error);
+      // Fallback to mock data
       setFeedbackData(mockFeedback);
       setStats(mockStats);
       setTotalPages(Math.ceil(568 / 6));
-    } catch (error) {
-      console.error("Error loading feedback data:", error);
+      setDataSource("Mock");
     } finally {
       setLoading(false);
     }
@@ -155,6 +218,27 @@ const Feedback = () => {
 
   return (
     <div className="feedback-page">
+      {/* Data Source Indicator */}
+      {dataSource && (
+        <div
+          style={{
+            padding: "10px 20px",
+            marginBottom: "20px",
+            borderRadius: "8px",
+            backgroundColor: dataSource === "API" ? "#e8f5e8" : "#fff3cd",
+            border:
+              dataSource === "API" ? "1px solid #4caf50" : "1px solid #ffc107",
+            color: dataSource === "API" ? "#2e7d32" : "#856404",
+            fontWeight: "bold",
+            textAlign: "center",
+          }}
+        >
+          {dataSource === "API"
+            ? "🟢 Data Source: FeedbackService API (Live Data)"
+            : "🟡 Data Source: Frontend Mock Data (API Not Available)"}
+        </div>
+      )}
+
       {/* Main Content */}
       <div className="feedback-content">
         {/* Ratings Section */}
