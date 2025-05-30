@@ -1301,75 +1301,7 @@ footer {
   cursor: pointer;
 }
 
-.events-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-.event-card {
-  position: relative;
-  background-color: var(--gray-20);
-  border-radius: 1rem;
-  overflow: hidden;
-  height: 200px;
-}
-
-.event-card-tag {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  background-color: var(--gray-10);
-  border-radius: 0.5rem;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--gray-90);
-}
-
-.event-card-content {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: var(--gray-10);
-  padding: 1rem;
-  border-top-left-radius: 1rem;
-  border-top-right-radius: 1rem;
-}
-
-.event-card-content h4 {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--gray-90);
-  margin: 0 0 0.5rem;
-}
-
-.event-location {
-  font-size: 0.8rem;
-  color: var(--gray-70);
-  margin: 0 0 1rem;
-}
-
-.event-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.event-date {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.8rem;
-  color: var(--gray-70);
-}
-
-.event-price {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--primary-100);
-}
+/* Old event card styles removed - using newer styles below */
 
 /* Recent bookings section */
 .recent-bookings-section {
