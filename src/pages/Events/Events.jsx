@@ -218,10 +218,6 @@ const Events = () => {
 
   return (
     <div className="events-page">
-      <div className="events-header">
-        <h1>Events</h1>
-      </div>
-
       {/* Data Source Indicator */}
       {dataSource && (
         <div

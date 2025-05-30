@@ -11,7 +11,7 @@ const Header = ({ onToggleSidebar }) => {
 
       <div className="header__title">
         <h2>Dashboard</h2>
-        <p>Hello Orlando, welcome back!</p>
+        <p>Hello Kim, welcome back!</p>
       </div>
 
       <div className="header__actions">
@@ -34,7 +34,7 @@ const Header = ({ onToggleSidebar }) => {
         <div className="header__profile">
           <div className="header__profile-pic"></div>
           <div className="header__profile-info">
-            <span className="header__profile-name">Orlando Laurentius</span>
+            <span className="header__profile-name">Kim Hammerstad</span>
             <span className="header__profile-role">Admin</span>
           </div>
         </div>

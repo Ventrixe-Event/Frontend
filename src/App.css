@@ -423,7 +423,8 @@ footer {
 .sidebar__logo-container {
   display: flex;
   align-items: center;
-  padding: 0 1.25rem 1.5rem;
+  justify-content: center;
+  padding: 1rem 1.25rem 1rem;
   margin-bottom: 0.5rem;
 }
 
@@ -436,8 +437,8 @@ footer {
 }
 
 .sidebar__logo-icon {
-  width: 3rem;
-  height: 3rem;
+  width: 4rem;
+  height: 4rem;
   object-fit: contain;
 }
 
@@ -501,96 +502,6 @@ footer {
 
 .sidebar__nav-label {
   font-size: 0.9rem;
-}
-
-.sidebar__footer {
-  margin-top: auto;
-  padding: 1rem 0;
-  border-top: 1px solid var(--cool-gray-30);
-}
-
-/* Promo banner section */
-.sidebar__promo {
-  padding: 1rem;
-  margin-top: auto;
-  margin-bottom: 0.5rem;
-}
-
-.sidebar__promo-card {
-  background-color: var(--gray-10);
-  border-radius: 1rem;
-  padding: 1rem;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.sidebar__promo-image {
-  width: 80px;
-  height: 80px;
-  margin-bottom: 0.5rem;
-}
-
-.sidebar__promo-title {
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--gray-90);
-  margin: 0.5rem 0 0.25rem;
-  line-height: 1.4;
-  text-align: center;
-}
-
-.sidebar__promo-button {
-  background-color: var(--primary-100);
-  color: white;
-  border: none;
-  border-radius: 1rem;
-  padding: 0.5rem 1rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  cursor: pointer;
-  margin-top: 0.75rem;
-}
-
-.sidebar__signout-button {
-  all: unset;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: calc(100% - 2rem);
-  background-color: var(--cool-gray-20);
-  border-radius: 0.5rem;
-  color: var(--gray-80);
-  height: 2.5rem;
-  cursor: pointer;
-  margin: 0 1rem;
-  transition: background-color 0.2s;
-}
-
-.sidebar__signout-button:hover {
-  background-color: var(--cool-gray-30);
-}
-
-.sidebar__signout-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-}
-
-.sidebar__signout-icon {
-  color: inherit;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-}
-
-.sidebar__signout-text {
-  font-size: 0.9rem;
-  font-weight: 500;
 }
 
 /* Auth Forms */
@@ -727,197 +638,6 @@ footer {
   max-width: 100%;
   width: 100%;
   padding: 0;
-}
-
-/* Calendar styles */
-.dashboard-flex-container {
-  display: flex;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-@media (max-width: 1200px) {
-  .dashboard-flex-container {
-    flex-direction: column;
-  }
-}
-
-.dashboard-calendar-section {
-  background-color: var(--card-background-color);
-  border-radius: 1rem;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid var(--gray-30);
-  flex: 1;
-}
-
-.calendar-container {
-  margin-top: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-/* React DatePicker custom styles */
-.react-datepicker {
-  font-family: var(--font) !important;
-  border: none !important;
-  background-color: transparent !important;
-  width: 100% !important;
-}
-
-.react-datepicker__month-container {
-  width: 100% !important;
-}
-
-.datepicker-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--gray-30);
-}
-
-.datepicker-header-month {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.datepicker-header-month button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 0.7rem;
-  color: var(--gray-70);
-}
-
-.datepicker-header-nav {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.datepicker-nav-button {
-  background: var(--gray-20);
-  border: none;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--gray-70);
-  transition: background-color 0.2s;
-}
-
-.datepicker-nav-button:hover {
-  background-color: var(--gray-30);
-}
-
-.react-datepicker__header {
-  background-color: transparent !important;
-  border-bottom: none !important;
-  padding-top: 0 !important;
-}
-
-.react-datepicker__day-name,
-.react-datepicker__day {
-  width: 2.5rem !important;
-  height: 2.5rem !important;
-  line-height: 2.5rem !important;
-  margin: 0 !important;
-  border-radius: 0 !important;
-  font-size: 0.9rem !important;
-}
-
-.react-datepicker__day-name {
-  color: var(--gray-70) !important;
-  font-weight: 500 !important;
-}
-
-.react-datepicker__day--outside-month {
-  color: var(--gray-50) !important;
-}
-
-.react-datepicker__day--selected {
-  background-color: var(--primary-100) !important;
-  color: white !important;
-  font-weight: 500 !important;
-  border-radius: 50% !important;
-}
-
-.react-datepicker__day:hover {
-  background-color: var(--cool-gray-20) !important;
-  border-radius: 50% !important;
-}
-
-.highlighted-day {
-  position: relative;
-  color: var(--primary-100) !important;
-  font-weight: 600 !important;
-}
-
-.highlighted-day::after {
-  content: "";
-  position: absolute;
-  bottom: 7px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 5px;
-  height: 5px;
-  background-color: var(--primary-100);
-  border-radius: 50%;
-}
-
-/* Upcoming events styles */
-.upcoming-events {
-  margin-top: 1.5rem;
-}
-
-.upcoming-events h4 {
-  font-size: 1rem;
-  color: var(--gray-90);
-  margin: 0 0 1rem;
-  font-weight: 600;
-}
-
-.upcoming-event-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid var(--gray-20);
-}
-
-.event-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background-color: var(--primary-100);
-  margin-top: 5px;
-}
-
-.event-info {
-  flex: 1;
-}
-
-.event-name {
-  font-size: 0.9rem;
-  color: var(--gray-90);
-  margin: 0 0 0.25rem;
-  font-weight: 500;
-}
-
-.event-time {
-  font-size: 0.8rem;
-  color: var(--gray-70);
-  margin: 0;
-}
-
-.all-events-section {
-  flex: 2;
 }
 
 .dashboard-header {
@@ -1280,25 +1000,6 @@ footer {
 .category-count {
   font-size: 0.8rem;
   color: var(--gray-70);
-}
-
-/* All events section */
-.all-events-section {
-  background-color: var(--card-background-color);
-  border-radius: 1rem;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid var(--gray-30);
-  margin-bottom: 2rem;
-}
-
-.view-all-btn {
-  background-color: transparent;
-  color: var(--primary-100);
-  border: none;
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
 }
 
 /* Old event card styles removed - using newer styles below */
