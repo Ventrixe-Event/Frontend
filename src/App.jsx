@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import Invoices from "./pages/Invoices/Invoices";
 import Events from "./pages/Events/Events";
 import Feedback from "./pages/Feedback/Feedback";
+import Gallery from "./pages/Gallery/Gallery";
 import Login from "./assets/pages/Login";
 import SignUp from "./assets/pages/SignUp";
 import ForgotPassword from "./assets/pages/ForgotPassword";
@@ -30,6 +31,7 @@ function App() {
         <Route path="invoices" element={<Invoices />} />
         <Route path="events" element={<Events />} />
         <Route path="feedback" element={<Feedback />} />
+        <Route path="gallery" element={<Gallery />} />
       </Route>
     </Routes>
   );

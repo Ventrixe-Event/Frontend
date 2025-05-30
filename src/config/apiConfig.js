@@ -12,6 +12,7 @@ const API_URLS = {
   USER_PROFILES: "http://localhost:5008/api",
   FEEDBACK:
     "https://feedbackservice-a7cpfabadjd8c2dm.centralus-01.azurewebsites.net/api",
+  GALLERY: "https://localhost:7098/api", // Local development URL
 };
 
 // Common API endpoints for each service
@@ -58,6 +59,18 @@ const ENDPOINTS = {
     CREATE: "/feedbacks",
     STATS: "/feedbacks/statistics",
     CATEGORIES: "/categories",
+  },
+  GALLERY: {
+    ALL: "/gallery",
+    BY_ID: (id) => `/gallery/${id}`,
+    BY_CATEGORY: (category) => `/gallery/category/${category}`,
+    FEATURED: "/gallery/featured",
+    SEARCH: (searchTerm) =>
+      `/gallery/search?searchTerm=${encodeURIComponent(searchTerm)}`,
+    CATEGORIES: "/gallery/categories",
+    CREATE: "/gallery",
+    UPDATE: (id) => `/gallery/${id}`,
+    DELETE: (id) => `/gallery/${id}`,
   },
   // Add more endpoints as needed
 };

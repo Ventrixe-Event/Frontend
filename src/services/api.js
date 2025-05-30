@@ -78,3 +78,4 @@ export const categoriesApi = createApiClient(API_URLS.CATEGORIES);
 export const invoicesApi = createApiClient(API_URLS.INVOICES);
 export const userProfilesApi = createApiClient(API_URLS.USER_PROFILES);
 export const feedbackApi = createApiClient(API_URLS.FEEDBACK);
+export const galleryApi = createApiClient(API_URLS.GALLERY);
