@@ -12,7 +12,8 @@ const API_URLS = {
   USER_PROFILES: "http://localhost:5008/api",
   FEEDBACK:
     "https://feedbackservice-a7cpfabadjd8c2dm.centralus-01.azurewebsites.net/api",
-  GALLERY: "https://localhost:7098/api", // Local development URL
+  GALLERY:
+    "https://galleryservice-afhfd6aveweyauc6.centralus-01.azurewebsites.net/api", // Local development URL
 };
 
 // Common API endpoints for each service
