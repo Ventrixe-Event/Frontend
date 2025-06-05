@@ -1,7 +1,14 @@
+/**
+ * API Service Configuration - Centralized HTTP client setup for microservices communication
+ * Features: Axios interceptors, automatic token refresh, error handling, multi-service support
+ * Author: Kim Hammerstad (with API architecture and interceptor patterns guided by Claude 4)
+ */
+
 import axios from "axios";
 import { API_URLS } from "../config/apiConfig";
 
-// Create axios instances for each service
+// Create configured axios instances for each microservice
+// Each service gets its own client with shared interceptor logic
 const createApiClient = (baseURL) => {
   const client = axios.create({
     baseURL,
@@ -10,7 +17,7 @@ const createApiClient = (baseURL) => {
     },
   });
 
-  // Request interceptor - add auth token
+  // Request interceptor - Automatically adds JWT tokens to outgoing requests
   client.interceptors.request.use(
     (config) => {
       const token = localStorage.getItem("accessToken");
@@ -22,18 +29,18 @@ const createApiClient = (baseURL) => {
     (error) => Promise.reject(error)
   );
 
-  // Response interceptor - handle token refresh
+  // Response interceptor - Handles automatic token refresh on 401 errors
   client.interceptors.response.use(
     (response) => response,
     async (error) => {
       const originalRequest = error.config;
 
-      // If 401 error and not already retrying
+      // If 401 (Unauthorized) error and not already retrying token refresh
       if (error.response?.status === 401 && !originalRequest._retry) {
         originalRequest._retry = true;
 
         try {
-          // Try to refresh the token
+          // Attempt to refresh the expired access token
           const refreshToken = localStorage.getItem("refreshToken");
           if (!refreshToken) throw new Error("No refresh token available");
 
@@ -41,21 +48,21 @@ const createApiClient = (baseURL) => {
             refreshToken,
           });
 
-          // Save new tokens
+          // Update stored tokens with fresh ones
           localStorage.setItem("accessToken", data.accessToken);
           if (data.refreshToken) {
             localStorage.setItem("refreshToken", data.refreshToken);
           }
 
-          // Retry original request with new token
+          // Retry the original request with the new access token
           originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
           return axios(originalRequest);
         } catch (refreshError) {
-          // Handle refresh failure (e.g., logout user)
+          // Token refresh failed - user needs to login again
           localStorage.removeItem("accessToken");
           localStorage.removeItem("refreshToken");
 
-          // Redirect to login page or dispatch logout action
+          // Redirect to login page (TODO: Use React Router navigation instead)
           window.location.href = "/login";
           return Promise.reject(refreshError);
         }
@@ -68,7 +75,8 @@ const createApiClient = (baseURL) => {
   return client;
 };
 
-// Create API clients for each service
+// Create dedicated API clients for each microservice in the distributed system
+// This pattern allows each service to have independent configurations if needed
 export const authApi = createApiClient(API_URLS.AUTH);
 export const eventsApi = createApiClient(API_URLS.EVENTS);
 export const bookingsApi = createApiClient(API_URLS.BOOKINGS);

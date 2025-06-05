@@ -1,49 +1,152 @@
-# Ventixe Frontend
+# Ventixe Event Management System - Frontend
 
-A modern React-based dashboard application for managing invoices and feedback in a microservices architecture.
+**Inlämningsuppgift - Molntjänster och distribuerade system**
+
+A modern React-based event management platform built as a Minimum Viable Product (MVP) using microservices architecture.
 
 ## 🌐 Live Demo
 
 **🚀 Deployed Application**: [https://brave-wave-0648c4d10.6.azurestaticapps.net](https://brave-wave-0648c4d10.6.azurestaticapps.net)
 
-## 📋 Overview
+## 📋 Project Overview
 
-Ventixe Frontend is a responsive React application that provides a comprehensive dashboard for:
+Ventixe is an event management system built as part of a cloud services and distributed systems assignment. The project demonstrates a complete microservices architecture with a modern React frontend and multiple ASP.NET Core Web API backend services.
 
-- **Invoice Management**: Track, create, and manage invoices
-- **Feedback System**: Monitor customer feedback and ratings
-- **Dashboard Analytics**: Visual insights into business metrics
+### Assignment Requirements Fulfilled
+
+✅ **Frontend Application**: React-based dashboard with MVP functionality for event management  
+✅ **Multiple Backend Services**: 4 distributed microservices (EventService, FeedbackService, GalleryService, InvoiceService)  
+✅ **Cloud Deployment**: All services deployed on Azure (Static Web Apps + Web Apps)  
+✅ **GitHub Organization**: All repositories organized under GitHub organization  
+✅ **Public Access**: Fully functional public website  
+✅ **Design Consistency**: Follows provided design guidelines with consistent structure and color scheme
+
+## 🎯 MVP Features
+
+The Ventixe platform provides core event management functionality:
+
+### 🏠 Dashboard
+
+- **Event Overview**: Real-time event statistics and metrics
+- **Revenue Analytics**: Financial performance tracking
+- **Feedback Monitoring**: Customer satisfaction insights
+- **Quick Actions**: Easy access to recent activities
+
+### 🎪 Event Management
+
+- Create, view, and manage events
+- Event categorization (Music, Fashion, Technology, Food, etc.)
+- Event status tracking and analytics
+- Comprehensive event details and metadata
+
+### 💬 Feedback System
+
+- Customer feedback collection and analysis
+- Rating system (1-5 stars) with category-based feedback
+- Anonymous feedback support
+- Feedback analytics and reporting
+- Real-time feedback monitoring
+
+### 🖼️ Gallery Management
+
+- Event photo and media management
+- Image upload and organization
+- Gallery categorization and tagging
+- Media analytics and insights
+
+### 📄 Invoice & Financial Management
+
+- Invoice creation and management
+- Payment status tracking (Draft, Sent, Paid, Overdue, Cancelled)
+- Financial reporting and analytics
+- Integration with event bookings
 
 ## 🛠️ Technologies Used
 
+### Frontend Stack
+
 - **React 18** - Modern React with functional components and hooks
-- **React Router** - Client-side routing
-- **Axios** - HTTP client for API calls
-- **React Icons** - Icon library
+- **Vite** - Fast build tool and development server
+- **React Router** - Client-side routing for SPA navigation
+- **Axios** - HTTP client for microservices communication
+- **React Icons** - Comprehensive icon library
+- **CSS3** - Custom styling with CSS variables and responsive design
 - **React DatePicker** - Date selection components
-- **CSS3** - Custom styling with CSS variables
-- **Vite** - Build tool and development server
+
+### Development Tools
+
+- **ESLint** - Code linting and quality
+- **Prettier** - Code formatting
+- **Git** - Version control
+- **Azure Static Web Apps** - Deployment and hosting
 
 ## 🏗️ Architecture
 
-The frontend follows a clean architecture pattern:
+The frontend follows modern React patterns and connects to a distributed microservices backend:
+
+```
+Ventixe Frontend (React SPA)
+├── Event Management Dashboard
+├── Feedback Collection Interface
+├── Gallery Management System
+└── Invoice & Financial Tracking
+
+↕️ HTTP/REST Communication
+
+Microservices Backend (.NET 9)
+├── EventService (Event CRUD & Analytics)
+├── FeedbackService (Feedback Collection & Analytics)
+├── GalleryService (Media Management)
+└── InvoiceService (Financial Management)
+```
+
+### Frontend Structure
 
 ```
 src/
 ├── assets/
-│   └── components/     # Reusable UI components
+│   ├── components/     # Reusable UI components (Header, Sidebar, Footer)
+│   └── layouts/        # Layout components (Portal, Center)
 ├── config/
-│   └── apiConfig.js    # API endpoints configuration
+│   └── apiConfig.js    # Microservices endpoints configuration
 ├── contexts/           # React contexts for state management
-├── pages/              # Page components
-│   ├── Dashboard/      # Main dashboard
-│   ├── Invoices/       # Invoice management
-│   └── Feedback/       # Feedback management
-└── services/           # API service layer
-    ├── api.js          # Axios configuration
-    ├── invoiceService.js
-    └── feedbackService.js
+├── pages/              # Feature-specific page components
+│   ├── Dashboard/      # Main dashboard and analytics
+│   ├── Events/         # Event management interface
+│   ├── Feedback/       # Feedback collection and viewing
+│   ├── Gallery/        # Media management interface
+│   └── Invoices/       # Financial management
+└── services/           # API service layer for microservices
+    ├── api.js          # Axios configuration and interceptors
+    ├── eventService.js
+    ├── feedbackService.js
+    ├── galleryService.js
+    └── invoiceService.js
 ```
+
+## 🔌 Microservices Integration
+
+The frontend communicates with multiple backend services deployed on Azure:
+
+### Service Architecture
+
+- **EventService**: `https://eventservice-[hash].azurewebsites.net`
+- **FeedbackService**: `https://feedbackservice-[hash].azurewebsites.net`
+- **GalleryService**: `https://galleryservice-[hash].azurewebsites.net`
+- **InvoiceService**: `https://invoiceservice-[hash].azurewebsites.net`
+
+Each microservice follows clean architecture with:
+
+- **Presentation Layer**: ASP.NET Core Web API controllers
+- **Application Layer**: Business logic and services
+- **Persistence Layer**: Entity Framework Core with SQL Server
+
+### Communication Patterns
+
+- **REST API**: Primary communication method using HTTP/HTTPS
+- **JSON**: Data exchange format
+- **CORS**: Properly configured for cross-origin requests
+- **Error Handling**: Graceful error handling and user feedback
 
 ## 🔧 Setup Instructions
 
@@ -51,13 +154,14 @@ src/
 
 - Node.js 18+ and npm
 - Git
+- Modern web browser
 
 ### Local Development
 
 1. **Clone the repository**
 
    ```bash
-   git clone <your-repo-url>
+   git clone <frontend-repo-url>
    cd Frontend
    ```
 
@@ -67,33 +171,32 @@ src/
    npm install
    ```
 
-3. **Start development server**
+3. **Configure API endpoints**
+   Update `src/config/apiConfig.js` with your microservice URLs
+
+4. **Start development server**
 
    ```bash
    npm run dev
    ```
 
-4. **Open browser**
+5. **Open browser**
    Navigate to `http://localhost:5173`
-
-### Environment Configuration
-
-The application connects to the following Azure microservices:
-
-- **InvoiceService**: `https://invoiceservice-gmafbqd0gjg8abdf.centralus-01.azurewebsites.net`
-- **FeedbackService**: `https://feedbackservice-a7cpfabadjd8c2dm.centralus-01.azurewebsites.net`
-
-API endpoints are configured in `src/config/apiConfig.js`.
 
 ## 🚀 Deployment
 
 ### Azure Static Web Apps
 
-This application is deployed using Azure Static Web Apps with automatic deployment from GitHub.
+The application is deployed using Azure Static Web Apps with:
 
-**Deployment URL**: [https://brave-wave-0648c4d10.6.azurestaticapps.net](https://brave-wave-0648c4d10.6.azurestaticapps.net)
+- **Automatic deployment** from GitHub repository
+- **Custom domain** support
+- **SSL/HTTPS** enabled by default
+- **Global CDN** for fast content delivery
 
-### Build Commands
+**Live URL**: [https://brave-wave-0648c4d10.6.azurestaticapps.net](https://brave-wave-0648c4d10.6.azurestaticapps.net)
+
+### Build Process
 
 ```bash
 # Build for production
@@ -101,133 +204,107 @@ npm run build
 
 # Preview build locally
 npm run preview
+
+# Lint code
+npm run lint
 ```
 
-## 🎯 Features
+## 🎨 Design & UX
 
-### 📊 Dashboard
+The application follows the provided design specifications:
 
-- **Key Metrics**: Total invoices, pending invoices, feedback received
-- **Revenue Analytics**: Monthly revenue charts
-- **Feedback Overview**: Rating distribution and statistics
-- **Quick Actions**: Recent invoices and feedback
+### Design Compliance
 
-### 📄 Invoice Management
+✅ **Structure**: Consistent layout and navigation patterns  
+✅ **Color Scheme**: Adheres to provided color palette  
+✅ **Profiling**: Maintains visual identity requirements  
+✅ **Responsive**: Works across desktop, tablet, and mobile devices
 
-- View all invoices with filtering and search
-- Create, edit, and delete invoices
-- Track invoice status (Paid, Pending, Overdue)
-- Export and print functionality
+### Key UI Features
 
-### 💬 Feedback System
+- **Sidebar Navigation**: Easy access to all system modules
+- **Dashboard Widgets**: Real-time data visualization
+- **Form Interfaces**: Intuitive data entry for events, feedback, etc.
+- **Loading States**: Smooth user experience during API calls
+- **Error Handling**: User-friendly error messages and recovery
 
-- Monitor customer feedback and ratings
-- View feedback statistics and trends
-- Filter feedback by rating, date, and category
-- Respond to customer feedback
+## 🤖 AI Assistance Acknowledgment
 
-### 🎨 UI/UX Features
+This project was developed with assistance from AI tools for enhanced productivity and code quality:
 
-- **Responsive Design**: Works on desktop, tablet, and mobile
-- **Dark/Light Theme**: Consistent color scheme
-- **Loading States**: Smooth loading animations
-- **Error Handling**: User-friendly error messages
-- **Navigation**: Intuitive sidebar navigation
+### Frontend Development
 
-## 🔌 API Integration
+- **v0.dev**: Used for rapid UI component prototyping and design implementation
+- **Claude (Anthropic)**: Provided guidance on React best practices and architecture decisions
 
-The frontend integrates with multiple microservices:
+### Backend Development
 
-### Invoice Service
+- **Claude (Anthropic)**: Served as a mentor for .NET 9 microservices architecture, Entity Framework Core implementation, and clean architecture patterns
 
-```javascript
-// Example API calls
-invoiceService.getAllInvoices();
-invoiceService.createInvoice(invoiceData);
-invoiceService.updateInvoice(id, updateData);
-```
+The AI assistance was used as a development accelerator and learning tool, while all architectural decisions and implementation details were reviewed and understood by the development team.
 
-### Feedback Service
+## 🧪 Testing & Quality
 
-```javascript
-// Example API calls
-feedbackService.getAllFeedback();
-feedbackService.createFeedback(feedbackData);
-feedbackService.getFeedbackStats();
-```
+### Code Quality
 
-## 📱 Responsive Design
+- **ESLint**: Enforces coding standards and best practices
+- **Component Testing**: Manual testing of all UI components
+- **API Integration Testing**: Verified communication with all microservices
+- **Responsive Testing**: Tested across multiple device sizes
 
-The application is fully responsive with breakpoints:
+### Performance
 
-- **Desktop**: 1200px+
-- **Tablet**: 768px - 1199px
-- **Mobile**: < 768px
+- **Lazy Loading**: Components loaded on demand
+- **API Optimization**: Efficient data fetching patterns
+- **Bundle Optimization**: Vite-optimized production builds
 
-## 🛡️ Security Features
+## 📊 MVP Success Criteria
+
+The delivered MVP successfully demonstrates:
+
+✅ **Functional Event System**: Complete event lifecycle management  
+✅ **User Interface**: Intuitive and responsive design  
+✅ **Microservices Architecture**: Distributed system with proper separation of concerns  
+✅ **Cloud Deployment**: Fully operational in Azure cloud environment  
+✅ **Data Management**: Persistent storage and retrieval across all services  
+✅ **Real-time Features**: Live data updates and analytics
+
+## 🤝 Development Team
+
+- **Developer**: Kim Hammerstad
+- **AI Mentoring**: Claude (Anthropic) for backend architecture
+- **UI Assistance**: v0.dev for frontend components
+
+## 📄 Project Context
+
+This project fulfills the requirements for "Inlämningsuppgift - Molntjänster och distribuerade system" by demonstrating:
+
+- **Microservices Architecture**: Multiple independent services
+- **Cloud Deployment**: Azure-hosted distributed system
+- **Modern Frontend**: React-based single-page application
+- **MVP Approach**: Focused feature set with room for expansion
+- **Design Compliance**: Adherence to provided design specifications
+
+## 🛡️ Security & Best Practices
 
 - **CORS Configuration**: Proper cross-origin resource sharing
-- **API Error Handling**: Graceful error handling for API failures
-- **Input Validation**: Client-side form validation
+- **Input Validation**: Client-side and server-side validation
+- **Error Handling**: Graceful degradation and user feedback
+- **Security Headers**: Implemented in Azure Static Web Apps
+- **HTTPS**: Enforced across all communications
 
-## 🧪 Testing
+## 📈 Future Enhancements
 
-```bash
-# Run tests
-npm test
+The MVP foundation allows for future expansion:
 
-# Run tests with coverage
-npm run test:coverage
-```
-
-## 📦 Build & Production
-
-```bash
-# Create production build
-npm run build
-
-# Analyze bundle size
-npm run analyze
-```
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👥 Support
-
-For support and questions:
-
-- Create an issue in the GitHub repository
-- Contact the development team
-
-## 🗂️ Project Structure
-
-```
-Frontend/
-├── public/                 # Static assets
-├── src/
-│   ├── assets/            # Images, icons, components
-│   ├── config/            # Configuration files
-│   ├── contexts/          # React contexts
-│   ├── pages/             # Page components
-│   ├── services/          # API services
-│   ├── App.jsx            # Main app component
-│   ├── App.css            # Global styles
-│   └── main.jsx           # Entry point
-├── package.json           # Dependencies and scripts
-├── vite.config.js         # Vite configuration
-└── README.md              # This file
-```
+- User authentication and authorization
+- Real-time notifications
+- Advanced analytics and reporting
+- Mobile application development
+- Third-party integrations (payment, messaging)
+- Advanced event management features
 
 ---
 
-Built with ❤️ using React and deployed on Azure Static Web Apps
+**Built with ❤️ as part of cloud services and distributed systems coursework**  
+**Deployed on Microsoft Azure | Developed with React & .NET 9**

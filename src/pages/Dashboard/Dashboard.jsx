@@ -1,3 +1,10 @@
+/**
+ * Dashboard Page - Main analytics and overview interface for the Ventixe platform
+ * Features: Key metrics, revenue charts, feedback analytics, recent activity tables
+ * Uses mock data for MVP demonstration - designed for real API integration
+ * Author: Kim Hammerstad (with dashboard design patterns guided by Claude 4)
+ */
+
 import React from "react";
 import { FaFileInvoiceDollar, FaComments } from "react-icons/fa";
 
